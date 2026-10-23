@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="64" viewBox="0 0 256 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6B35"/>
+      <stop offset="1" stop-color="#F7931E"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <rect x="4" y="10" width="44" height="30" rx="8" fill="url(#g)"/>
+    <circle cx="16" cy="40" r="4" fill="#FF6B35"/>
+    <circle cx="36" cy="40" r="4" fill="#FF6B35"/>
+    <path d="M12 18h28v10H12z" fill="#fff" opacity="0.9"/>
+    <path d="M10 28h32" stroke="#fff" stroke-width="2" opacity="0.8"/>
+    <path d="M4 22h4M44 22h4" stroke="#fff" stroke-width="2" opacity="0.7"/>
+    <path d="M6 34L2 38M46 34L50 38" stroke="#FF6B35" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <text x="60" y="38" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" fill="#FFFFFF">vev</text>
+</svg>
