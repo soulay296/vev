@@ -1,10 +1,11 @@
-import app from "./app.js";
-import dotenv from "dotenv";
+import app from './app.js'
 
-dotenv.config();
+const PORT = process.env.PORT || 5000
 
-const PORT = process.env.PORT || 5000;
+if (!process.env.JWT_SECRET) {
+  console.warn('JWT_SECRET non défini : valeur de développement utilisée. Définissez-le en production.')
+}
 
 app.listen(PORT, () => {
-  console.log(`vev backend running on http://localhost:${PORT}`);
-});
+  console.log(`vev backend running on http://localhost:${PORT}`)
+})

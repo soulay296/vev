@@ -14,6 +14,17 @@ body {
   @apply bg-background-dark text-text-dark;
 }
 
+:focus-visible {
+  outline: 2px solid #C2410C;
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

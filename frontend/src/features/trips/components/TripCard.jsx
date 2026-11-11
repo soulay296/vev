@@ -4,6 +4,8 @@ import { ArrowRight, Clock, Phone, Star, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Badge } from '../../../components/ui/Badge'
+import { buttonClasses } from '../../../components/ui/Button'
+import { SafeImage } from '../../../components/ui/SafeImage'
 import { images } from '../../../constants/images'
 
 const vehicleLabels = { bus: 'Bus', minibus: 'Minibus', van: 'Van' }
@@ -18,16 +20,16 @@ export function TripCard({ trip }) {
       className="overflow-hidden rounded-3xl border border-border-light bg-surface-light shadow-card dark:border-border-dark dark:bg-surface-dark"
     >
       <div className="relative h-36 w-full overflow-hidden">
-        <img
+        <SafeImage
           src={vehicleImage.src}
+          fallback={vehicleImage.placeholder}
           alt={vehicleImage.alt}
-          loading="lazy"
           className="h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute bottom-2 left-3 flex items-center gap-2 text-white">
-          <Badge variant="default" className="bg-black/40 text-white backdrop-blur">
-            {vehicleLabels[trip.vehicle_type]}
+          <Badge className="bg-black/40 text-white backdrop-blur">
+            {vehicleLabels[trip.vehicle_type] || 'Minibus'}
           </Badge>
           <span className="text-xs font-medium">{format(date, 'EEE d MMM', { locale: fr })}</span>
         </div>
@@ -50,16 +52,15 @@ export function TripCard({ trip }) {
           <span className="inline-flex items-center gap-1">
             <Users size={15} /> {trip.seats_left} places restantes
           </span>
-          <span className="inline-flex items-center gap-1">
-            <Star size={15} className="text-secondary" /> {trip.owner_rating} · {trip.owner_name}
-          </span>
+          {trip.owner_rating != null && (
+            <span className="inline-flex items-center gap-1">
+              <Star size={15} className="text-primary" /> {trip.owner_rating} · {trip.owner_name}
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-2 pt-1">
-          <Link
-            to={`/trips/${trip.id}`}
-            className="flex-1 rounded-2xl bg-primary px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-secondary"
-          >
+          <Link to={`/trips/${trip.id}`} className={buttonClasses({ className: 'flex-1' })}>
             Voir le trajet
           </Link>
           <a

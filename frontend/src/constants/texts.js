@@ -10,4 +10,4 @@ export const texts = {
   ownerSpace: "Espace propriétaire",
   loading: "Chargement...",
   empty: "Aucun résultat",
-} as const;
+}

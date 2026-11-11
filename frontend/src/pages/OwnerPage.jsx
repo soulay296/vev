@@ -1,18 +1,101 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { CalendarPlus, Car, Phone, Ticket, TrendingUp } from 'lucide-react'
 import { EmptyState } from '../components/ui/EmptyState'
 import { Badge } from '../components/ui/Badge'
-
-const stats = [
-  { label: 'Trajets publiés', value: '0', icon: Car },
-  { label: 'Réservations', value: '0', icon: Ticket },
-  { label: 'Revenus estimés', value: '0 DT', icon: TrendingUp },
-]
+import { Button, buttonClasses } from '../components/ui/Button'
+import { Modal } from '../components/ui/Modal'
+import { BottomSheet } from '../components/ui/BottomSheet'
+import { Skeleton } from '../components/ui/Skeleton'
+import { useMediaQuery } from '../hooks/useMediaQuery'
+import { useAuth } from '../features/auth/AuthContext'
+import { useDeleteTrip, useMyTrips, useReceivedBookings, useSaveTrip, useUpdateBookingStatus } from '../features/owner/hooks'
+import { TripForm } from '../features/owner/components/TripForm'
+import { OwnerTripCard } from '../features/owner/components/OwnerTripCard'
+import { IncomingBookingCard } from '../features/owner/components/IncomingBookingCard'
+import { isDemoMode } from '../lib/api'
 
 export function OwnerPage() {
-  const comingSoon = () =>
-    toast.info("La gestion des trajets sera disponible à l'étape de l'espace propriétaire.")
+  const { user } = useAuth()
+  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { data: myTrips = [], isLoading } = useMyTrips()
+  const { data: received = [] } = useReceivedBookings()
+  const saveTrip = useSaveTrip()
+  const deleteTrip = useDeleteTrip()
+  const updateStatus = useUpdateBookingStatus()
+  const [formOpen, setFormOpen] = useState(false)
+  const [editing, setEditing] = useState(null)
+
+  if (!isDemoMode() && user && user.role !== 'owner') {
+    return (
+      <div className="mx-auto max-w-md px-4 py-10">
+        <EmptyState
+          title="Compte étudiant"
+          description="L'espace propriétaire est réservé aux comptes propriétaires de transport. Créez un compte propriétaire pour publier vos trajets."
+          action={
+            <Link to="/search" className={buttonClasses()}>
+              Chercher un trajet
+            </Link>
+          }
+        />
+      </div>
+    )
+  }
+
+  const activeBookings = received.filter((booking) => booking.status !== 'cancelled' && booking.status !== 'refused')
+  const revenue = activeBookings
+    .filter((booking) => booking.status === 'confirmed')
+    .reduce((sum, booking) => sum + booking.seats * (booking.trip?.price || 0), 0)
+
+  const stats = [
+    { label: 'Trajets publiés', value: String(myTrips.length), icon: Car },
+    { label: 'Réservations', value: String(activeBookings.length), icon: Ticket },
+    { label: 'Revenus confirmés', value: `${revenue} DT`, icon: TrendingUp },
+  ]
+
+  const openCreate = () => {
+    setEditing(null)
+    setFormOpen(true)
+  }
+
+  const openEdit = (trip) => {
+    setEditing(trip)
+    setFormOpen(true)
+  }
+
+  const handleSubmit = (values) => {
+    saveTrip.mutate(
+      { ...values, id: editing?.id },
+      {
+        onSuccess: () => {
+          setFormOpen(false)
+          toast.success(editing ? 'Trajet mis à jour.' : 'Trajet publié !')
+        },
+        onError: (error) => toast.error(error.message || 'Enregistrement impossible.'),
+      }
+    )
+  }
+
+  const handleDelete = (trip) => {
+    deleteTrip.mutate(trip, {
+      onSuccess: () => toast.success('Trajet supprimé.'),
+      onError: (error) => toast.error(error.message || 'Suppression impossible.'),
+    })
+  }
+
+  const handleStatus = (booking, status) => {
+    updateStatus.mutate(
+      { booking, status },
+      {
+        onSuccess: () =>
+          toast.success(status === 'confirmed' ? 'Réservation confirmée.' : 'Réservation refusée.'),
+        onError: (error) => toast.error(error.message || 'Action impossible.'),
+      }
+    )
+  }
+
+  const FormDialog = isMobile ? BottomSheet : Modal
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6">
@@ -23,13 +106,9 @@ export function OwnerPage() {
             Publiez vos trajets et gérez les réservations.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={comingSoon}
-          className="inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-secondary"
-        >
+        <Button onClick={openCreate}>
           <CalendarPlus size={18} /> Ajouter un trajet
-        </button>
+        </Button>
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -49,23 +128,43 @@ export function OwnerPage() {
 
       <div className="mt-6 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Mes trajets</h2>
-        <Badge variant="warning">Démo</Badge>
+        {isDemoMode() && <Badge variant="warning">Démo</Badge>}
       </div>
 
-      <div className="mt-3">
-        <EmptyState
-          title="Aucun trajet publié"
-          description="Ajoutez votre premier trajet : départ, arrivée, horaire, prix, places et numéro de téléphone."
-          action={
-            <button
-              type="button"
-              onClick={comingSoon}
-              className="inline-flex rounded-2xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-secondary"
-            >
-              Publier un trajet
-            </button>
-          }
-        />
+      <div className="mt-3 space-y-3">
+        {isLoading ? (
+          <Skeleton className="h-28 rounded-3xl" />
+        ) : myTrips.length === 0 ? (
+          <EmptyState
+            title="Aucun trajet publié"
+            description="Ajoutez votre premier trajet : départ, arrivée, horaire, prix, places et numéro de téléphone."
+            action={
+              <Button onClick={openCreate}>Publier un trajet</Button>
+            }
+          />
+        ) : (
+          myTrips.map((trip) => (
+            <OwnerTripCard key={trip.id} trip={trip} onEdit={openEdit} onDelete={handleDelete} />
+          ))
+        )}
+      </div>
+
+      <h2 className="mt-8 text-lg font-semibold">Réservations reçues</h2>
+      <div className="mt-3 space-y-3">
+        {received.length === 0 ? (
+          <EmptyState
+            title="Aucune réservation reçue"
+            description="Les demandes des étudiants apparaîtront ici pour confirmation ou refus."
+          />
+        ) : (
+          received.map((booking) => (
+            <IncomingBookingCard
+              key={booking.id}
+              booking={booking}
+              onStatus={(status) => handleStatus(booking, status)}
+            />
+          ))
+        )}
       </div>
 
       <div className="mt-6 rounded-3xl border border-border-light p-4 text-sm text-muted-light dark:border-border-dark dark:text-muted-dark">
@@ -73,7 +172,8 @@ export function OwnerPage() {
           <Phone size={16} className="text-primary" /> Paiement en espèces
         </p>
         <p className="mt-1">
-          Les étudiants paient directement le chauffeur. Le paiement en ligne sera ajouté plus tard sans changer le parcours de réservation.
+          Les étudiants paient directement le chauffeur. Le paiement en ligne sera ajouté plus tard sans changer le
+          parcours de réservation.
         </p>
       </div>
 
@@ -83,6 +183,15 @@ export function OwnerPage() {
           Chercher un trajet
         </Link>
       </p>
+
+      <FormDialog open={formOpen} onClose={() => setFormOpen(false)} title={editing ? 'Modifier le trajet' : 'Publier un trajet'}>
+        <TripForm
+          trip={editing}
+          defaultPhone={user?.phone}
+          onSubmit={handleSubmit}
+          submitting={saveTrip.isPending}
+        />
+      </FormDialog>
     </div>
   )
 }

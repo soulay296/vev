@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeftRight, Search } from 'lucide-react'
 import { Input } from '../../../components/ui/Input'
+import { Button } from '../../../components/ui/Button'
 import { cities } from '../../../constants/cities'
 
 const schema = z
@@ -96,13 +97,10 @@ export function SearchForm({ defaultValues, onSearch, compact = false }) {
         >
           <ArrowLeftRight size={18} />
         </button>
-        <button
-          type="submit"
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-secondary"
-        >
+        <Button type="submit" className="flex-1" size="lg">
           <Search size={18} />
           Rechercher un trajet
-        </button>
+        </Button>
       </div>
     </form>
   )

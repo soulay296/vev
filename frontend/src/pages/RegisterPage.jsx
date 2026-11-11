@@ -3,7 +3,11 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { Info } from 'lucide-react'
 import { Input } from '../components/ui/Input'
+import { Button } from '../components/ui/Button'
+import { useAuth } from '../features/auth/AuthContext'
+import { isDemoMode } from '../lib/api'
 
 const schema = z.object({
   first_name: z.string().min(2, 'Prénom requis'),
@@ -16,6 +20,7 @@ const schema = z.object({
 
 export function RegisterPage() {
   const navigate = useNavigate()
+  const { register: registerUser } = useAuth()
   const {
     register,
     handleSubmit,
@@ -25,10 +30,14 @@ export function RegisterPage() {
     defaultValues: { role: 'student' },
   })
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 400))
-    toast.info("L'inscription sera branchée à l'étape suivante.")
-    navigate('/')
+  const onSubmit = async (values) => {
+    try {
+      const result = await registerUser(values)
+      toast.success(result.demo ? 'Compte démo créé.' : 'Bienvenue sur vev !')
+      navigate(result.demo && values.role === 'owner' ? '/owner' : '/', { replace: true })
+    } catch (error) {
+      toast.error(error.message || 'Inscription impossible.')
+    }
   }
 
   return (
@@ -56,14 +65,18 @@ export function RegisterPage() {
           <option value="student">Étudiant</option>
           <option value="owner">Propriétaire de transport</option>
         </Input>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-secondary disabled:opacity-60"
-        >
+        <Button type="submit" size="lg" loading={isSubmitting}>
           {isSubmitting ? 'Création...' : "S'inscrire"}
-        </button>
+        </Button>
       </form>
+
+      {isDemoMode() && (
+        <p className="mt-4 flex items-start gap-2 rounded-2xl bg-secondary/15 p-3 text-xs text-amber-700 dark:text-amber-400">
+          <Info size={14} className="mt-0.5 shrink-0" />
+          Mode démo : le compte est stocké localement dans ce navigateur. Configurez VITE_API_BASE_URL pour une
+          inscription réelle.
+        </p>
+      )}
 
       <p className="mt-4 text-center text-sm text-muted-light dark:text-muted-dark">
         Déjà un compte ?{' '}

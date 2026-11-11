@@ -1,7 +1,8 @@
 import { Link, NavLink } from 'react-router-dom'
 import { Moon, Sun, LogIn, LayoutDashboard } from 'lucide-react'
 import { Logo } from '../ui/Logo'
-import { useTheme } from '../../hooks/theme'
+import { useTheme } from '../../providers/ThemeProvider'
+import { useAuth } from '../../features/auth/AuthContext'
 
 const links = [
   { to: '/search', label: 'Recherche' },
@@ -11,15 +12,16 @@ const links = [
 
 export function Header() {
   const { isDark, toggleTheme } = useTheme()
+  const { user } = useAuth()
 
   return (
     <header className="sticky top-0 z-30 border-b border-border-light bg-surface-light/90 backdrop-blur dark:border-border-dark dark:bg-surface-dark/90">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4">
-        <Link to="/" aria-label="Accueil vev" className="flex items-center gap-2">
+      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-2 px-4">
+        <Link to="/" aria-label="Accueil vev" className="flex shrink-0 items-center gap-2">
           <Logo dark={isDark} />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Navigation principale">
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -53,13 +55,25 @@ export function Header() {
           >
             <LayoutDashboard size={20} />
           </Link>
-          <Link
-            to="/login"
-            className="hidden items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-muted-light transition-colors hover:text-primary sm:flex dark:text-muted-dark"
-          >
-            <LogIn size={16} />
-            Connexion
-          </Link>
+          {user ? (
+            <Link
+              to="/profile"
+              className="flex items-center gap-2 rounded-xl py-1.5 pl-1.5 pr-2 transition-colors hover:bg-border-light dark:hover:bg-border-dark"
+            >
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-sm font-bold text-primary">
+                {(user.first_name || 'V').slice(0, 1).toUpperCase()}
+              </span>
+              <span className="hidden text-sm font-medium sm:inline">{user.first_name}</span>
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-muted-light transition-colors hover:text-primary dark:text-muted-dark"
+            >
+              <LogIn size={16} />
+              <span className="hidden sm:inline">Connexion</span>
+            </Link>
+          )}
         </div>
       </div>
     </header>

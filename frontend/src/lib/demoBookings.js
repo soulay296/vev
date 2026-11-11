@@ -9,26 +9,36 @@ export function getDemoBookings() {
   }
 }
 
-function notify() {
+function persist(bookings) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings))
   window.dispatchEvent(new Event('vev-bookings'))
 }
 
-export function saveDemoBooking(booking) {
+function isActive(booking) {
+  return booking.status === 'pending' || booking.status === 'confirmed'
+}
+
+export function saveDemoBooking({ tripId, seats, name }) {
   const all = getDemoBookings()
-  if (all.some((item) => item.tripId === booking.tripId)) return all
-  const next = [booking, ...all]
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-  notify()
-  return next
+  if (all.some((booking) => booking.tripId === tripId && isActive(booking))) return false
+  persist([
+    {
+      id: crypto.randomUUID(),
+      tripId,
+      seats,
+      name: name || 'Vous',
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    },
+    ...all,
+  ])
+  return true
 }
 
 export function cancelDemoBooking(id) {
-  const next = getDemoBookings().filter((item) => item.id !== id)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-  notify()
-  return next
+  persist(getDemoBookings().map((booking) => (booking.id === id ? { ...booking, status: 'cancelled' } : booking)))
 }
 
-export function isTripBooked(tripId) {
-  return getDemoBookings().some((item) => item.tripId === tripId)
+export function updateDemoBookingStatus(id, status) {
+  persist(getDemoBookings().map((booking) => (booking.id === id ? { ...booking, status } : booking)))
 }

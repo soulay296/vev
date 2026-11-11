@@ -19,4 +19,4 @@ export const cities = [
   'Kef',
   'Siliana',
   'Zaghouan',
-] as const;
+]

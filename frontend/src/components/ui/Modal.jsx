@@ -1,14 +1,12 @@
+import { useId, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
-import { useEffect } from 'react'
+import { useDialog } from '../../hooks/useDialog'
 
 export function Modal({ open, onClose, title, children }) {
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e) => e.key === 'Escape' && onClose?.()
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  const containerRef = useRef(null)
+  const titleId = useId()
+  useDialog({ open, onClose, containerRef })
 
   return (
     <AnimatePresence>
@@ -21,10 +19,11 @@ export function Modal({ open, onClose, title, children }) {
           onClick={onClose}
         >
           <motion.div
+            ref={containerRef}
             role="dialog"
             aria-modal="true"
-            aria-label={title}
-            className="w-full max-w-md rounded-3xl bg-surface-light p-5 shadow-card dark:bg-surface-dark"
+            aria-labelledby={titleId}
+            className="max-h-[85vh] w-full max-w-md overflow-y-auto rounded-3xl bg-surface-light p-5 shadow-card dark:bg-surface-dark"
             initial={{ opacity: 0, scale: 0.96, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
@@ -32,7 +31,7 @@ export function Modal({ open, onClose, title, children }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">{title}</h2>
+              <h2 id={titleId} className="text-lg font-semibold">{title}</h2>
               <button
                 type="button"
                 onClick={onClose}

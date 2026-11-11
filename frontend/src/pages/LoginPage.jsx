@@ -1,9 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { Info } from 'lucide-react'
 import { Input } from '../components/ui/Input'
+import { Button } from '../components/ui/Button'
+import { useAuth } from '../features/auth/AuthContext'
+import { isDemoMode } from '../lib/api'
 
 const schema = z.object({
   email: z.string().min(1, 'Email requis').email('Email invalide'),
@@ -12,16 +16,22 @@ const schema = z.object({
 
 export function LoginPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { login } = useAuth()
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) })
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 400))
-    toast.info("L'authentification sera branchée à l'étape suivante.")
-    navigate('/')
+  const onSubmit = async (values) => {
+    try {
+      const result = await login(values.email, values.password)
+      toast.success(result.demo ? 'Connecté en mode démo.' : 'Bon retour sur vev !')
+      navigate(location.state?.from || '/', { replace: true })
+    } catch (error) {
+      toast.error(error.message || 'Connexion impossible.')
+    }
   }
 
   return (
@@ -40,14 +50,18 @@ export function LoginPage() {
           error={errors.password?.message}
           {...register('password')}
         />
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-secondary disabled:opacity-60"
-        >
+        <Button type="submit" size="lg" loading={isSubmitting}>
           {isSubmitting ? 'Connexion...' : 'Se connecter'}
-        </button>
+        </Button>
       </form>
+
+      {isDemoMode() && (
+        <p className="mt-4 flex items-start gap-2 rounded-2xl bg-secondary/15 p-3 text-xs text-amber-700 dark:text-amber-400">
+          <Info size={14} className="mt-0.5 shrink-0" />
+          Mode démo : la connexion est simulée, n'importe quel identifiant fonctionne. Configurez VITE_API_BASE_URL pour
+          l'authentification réelle.
+        </p>
+      )}
 
       <p className="mt-4 text-center text-sm text-muted-light dark:text-muted-dark">
         Pas encore de compte ?{' '}

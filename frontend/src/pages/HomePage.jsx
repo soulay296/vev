@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Users } from 'lucide-react'
 import { SearchForm } from '../features/search/components/SearchForm'
+import { buttonClasses } from '../components/ui/Button'
+import { SafeImage } from '../components/ui/SafeImage'
 import { images } from '../constants/images'
 import { texts } from '../constants/texts'
 
@@ -20,13 +22,14 @@ const popularRoutes = [
 
 export function HomePage() {
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-5xl px-4 py-6">
+    <div className="mx-auto max-w-5xl px-4 py-6">
       <section className="relative overflow-hidden rounded-3xl">
-        <img
+        <SafeImage
           src={images.hero.src}
+          fallback={images.hero.placeholder}
           alt={images.hero.alt}
-          className="h-64 w-full object-cover sm:h-80"
           loading="eager"
+          className="h-64 w-full object-cover sm:h-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-8">
@@ -85,13 +88,10 @@ export function HomePage() {
         <p className="mt-1 text-sm text-muted-light dark:text-muted-dark">
           Publiez vos trajets et gérez les réservations des étudiants.
         </p>
-        <Link
-          to="/owner"
-          className="mt-4 inline-flex rounded-2xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-secondary"
-        >
+        <Link to="/owner" className={`${buttonClasses({ className: 'mt-4' })} sm:mt-4`}>
           Ouvrir l'espace propriétaire
         </Link>
       </section>
-    </motion.div>
+    </div>
   )
 }

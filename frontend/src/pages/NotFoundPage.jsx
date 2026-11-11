@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { buttonClasses } from '../components/ui/Button'
 
 export function NotFoundPage() {
   return (
@@ -8,10 +9,7 @@ export function NotFoundPage() {
       <p className="mt-1 text-sm text-muted-light dark:text-muted-dark">
         Cette page n'existe pas ou a été déplacée.
       </p>
-      <Link
-        to="/"
-        className="mt-5 rounded-2xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-secondary"
-      >
+      <Link to="/" className={buttonClasses({ className: 'mt-5' })}>
         Retour à l'accueil
       </Link>
     </div>

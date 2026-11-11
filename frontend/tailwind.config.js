@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#FF6B35',
+        primary: { DEFAULT: '#C2410C', hover: '#9A3412' },
         secondary: '#F7931E',
         accent: '#22C55E',
         background: { light: '#FFFFFF', dark: '#0F0F0F' },
@@ -21,10 +21,9 @@ export default {
         sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
       },
       borderRadius: { xl: '0.875rem', '2xl': '1rem', '3xl': '1.25rem' },
-      boxShadow: { soft: '0 10px 30px -10px rgba(255,107,53,0.25)', card: '0 4px 20px -8px rgba(0,0,0,0.15)' },
+      boxShadow: { soft: '0 10px 30px -10px rgba(194,65,12,0.25)', card: '0 4px 20px -8px rgba(0,0,0,0.15)' },
       transitionDuration: { '150': '150ms', '250': '250ms', '300': '300ms' },
     },
   },
   plugins: [],
 }
-
