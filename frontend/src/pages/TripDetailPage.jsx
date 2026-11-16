@@ -149,7 +149,7 @@ export function TripDetailPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-4 left-4 text-white">
             <Badge className="bg-black/40 text-white backdrop-blur">
-              {trip.vehicle_type === 'bus' ? 'Bus' : trip.vehicle_type === 'van' ? 'Van' : 'Minibus'}
+              Louage
             </Badge>
             <h1 className="mt-2 text-2xl font-bold">
               {trip.from_city} → {trip.to_city}

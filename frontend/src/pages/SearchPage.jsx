@@ -70,7 +70,7 @@ export function SearchPage() {
     <div className="mx-auto max-w-3xl px-4 py-6">
       <h1 className="text-2xl font-bold">Rechercher un trajet</h1>
       <p className="mt-1 text-sm text-muted-light dark:text-muted-dark">
-        Trouvez un bus, minibus ou van pour votre prochain déplacement.
+        Trouvez un louage pour votre prochain déplacement.
       </p>
 
       <div className="mt-4">

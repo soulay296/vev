@@ -1,6 +1,6 @@
 export const texts = {
   appName: 'vev',
-  tagline: 'Transport collectif tunisien',
+  tagline: 'Louages entre gouvernorats en Tunisie',
   callOwner: "Appeler le propriétaire",
   book: "Réserver une place",
   cancel: "Annuler",

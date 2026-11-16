@@ -3,11 +3,10 @@ import { apiFetch, isDemoMode, markDemoMode } from '../../lib/api'
 import {
   deleteDemoOwnerTrip,
   findDemoTrip,
-  getDemoBookings,
   getMyDemoTrips,
   saveDemoOwnerTrip,
 } from '../../lib/demoTrips'
-import { updateDemoBookingStatus } from '../../lib/demoBookings'
+import { getDemoBookings, updateDemoBookingStatus } from '../../lib/demoBookings'
 import { useAuth } from '../auth/AuthContext'
 
 function withDemoTrip(booking) {

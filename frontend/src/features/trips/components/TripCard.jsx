@@ -8,7 +8,7 @@ import { buttonClasses } from '../../../components/ui/Button'
 import { SafeImage } from '../../../components/ui/SafeImage'
 import { images } from '../../../constants/images'
 
-const vehicleLabels = { bus: 'Bus', minibus: 'Minibus', van: 'Van' }
+const vehicleLabels = { bus: 'Louage 12 places', minibus: 'Louage 8 places', van: 'Louage 6 places' }
 
 export function TripCard({ trip }) {
   const vehicleImage = images.vehicles[trip.vehicle_type] || images.vehicles.minibus
@@ -29,7 +29,7 @@ export function TripCard({ trip }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute bottom-2 left-3 flex items-center gap-2 text-white">
           <Badge className="bg-black/40 text-white backdrop-blur">
-            {vehicleLabels[trip.vehicle_type] || 'Minibus'}
+            {vehicleLabels[trip.vehicle_type] || 'Louage'}
           </Badge>
           <span className="text-xs font-medium">{format(date, 'EEE d MMM', { locale: fr })}</span>
         </div>

@@ -1,8 +1,8 @@
 const vehicles = [
   { value: 'all', label: 'Tous' },
-  { value: 'bus', label: 'Bus' },
-  { value: 'minibus', label: 'Minibus' },
-  { value: 'van', label: 'Van' },
+  { value: 'bus', label: 'Louage 12 places' },
+  { value: 'minibus', label: 'Louage 8 places' },
+  { value: 'van', label: 'Louage 6 places' },
 ]
 
 const sorts = [

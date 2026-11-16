@@ -91,9 +91,9 @@ export function TripForm({ trip, defaultPhone, onSubmit, submitting }) {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Input label="Type de véhicule" as="select" error={errors.vehicle_type?.message} {...register('vehicle_type')}>
-          <option value="minibus">Minibus</option>
-          <option value="bus">Bus</option>
-          <option value="van">Van</option>
+          <option value="minibus">Louage 8 places</option>
+          <option value="bus">Louage 12 places</option>
+          <option value="van">Louage 6 places</option>
         </Input>
         <Input
           label="Téléphone de contact"
