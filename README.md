@@ -1,6 +1,6 @@
 # vev
 
-vev est une application web (mobile-first) de transport collectif tunisien : réservation de places en louage entre gouvernorats.
+vev est une application web (mobile-first) de louage en Tunisie : réservation de places en louage entre gouvernorats.
 Les propriétaires publient leurs trajets avec leur numéro de téléphone, et les étudiants recherchent, rejoignent un groupe et réservent une place.
 
 ## Stack technique

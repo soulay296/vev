@@ -8,10 +8,10 @@ import { buttonClasses } from '../../../components/ui/Button'
 import { SafeImage } from '../../../components/ui/SafeImage'
 import { images } from '../../../constants/images'
 
-const vehicleLabels = { bus: 'Louage 12 places', minibus: 'Louage 8 places', van: 'Louage 6 places' }
+const vehicleLabels = { louage6: 'Louage 6 places', louage8: 'Louage 8 places', louage12: 'Louage 12 places' }
 
 export function TripCard({ trip }) {
-  const vehicleImage = images.vehicles[trip.vehicle_type] || images.vehicles.minibus
+  const vehicleImage = images.vehicles[trip.vehicle_type] || images.vehicles.louage8
   const date = parseISO(trip.departure_date)
 
   return (

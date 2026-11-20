@@ -14,7 +14,7 @@ const schema = z
     departure_time: z.string().regex(/^\d{2}:\d{2}$/, 'Heure au format HH:MM'),
     price: z.coerce.number().int('Prix entier requis').min(1, 'Prix minimum 1 DT').max(999),
     total_seats: z.coerce.number().int('Nombre entier requis').min(1, 'Au moins 1 place').max(60, 'Maximum 60 places'),
-    vehicle_type: z.enum(['bus', 'minibus', 'van']),
+    vehicle_type: z.enum(['louage6', 'louage8', 'louage12']),
     phone: z.string().min(8, 'Numéro invalide (8 chiffres minimum)'),
   })
   .refine((data) => data.from_city !== data.to_city, {
@@ -47,7 +47,7 @@ export function TripForm({ trip, defaultPhone, onSubmit, submitting }) {
           departure_time: '',
           price: 10,
           total_seats: 12,
-          vehicle_type: 'minibus',
+          vehicle_type: 'louage8',
           phone: defaultPhone || '',
         },
   })
@@ -90,10 +90,10 @@ export function TripForm({ trip, defaultPhone, onSubmit, submitting }) {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <Input label="Type de véhicule" as="select" error={errors.vehicle_type?.message} {...register('vehicle_type')}>
-          <option value="minibus">Louage 8 places</option>
-          <option value="bus">Louage 12 places</option>
-          <option value="van">Louage 6 places</option>
+        <Input label="Type de louage" as="select" error={errors.vehicle_type?.message} {...register('vehicle_type')}>
+          <option value="louage6">Louage 6 places</option>
+          <option value="louage8">Louage 8 places</option>
+          <option value="louage12">Louage 12 places</option>
         </Input>
         <Input
           label="Téléphone de contact"

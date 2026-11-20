@@ -1,8 +1,8 @@
 const vehicles = [
   { value: 'all', label: 'Tous' },
-  { value: 'bus', label: 'Louage 12 places' },
-  { value: 'minibus', label: 'Louage 8 places' },
-  { value: 'van', label: 'Louage 6 places' },
+  { value: 'louage6', label: 'Louage 6 places' },
+  { value: 'louage8', label: 'Louage 8 places' },
+  { value: 'louage12', label: 'Louage 12 places' },
 ]
 
 const sorts = [
@@ -15,7 +15,7 @@ const sorts = [
 export function SearchFilters({ value, onChange }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Type de véhicule">
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Type de louage">
         {vehicles.map((vehicle) => (
           <button
             key={vehicle.value}

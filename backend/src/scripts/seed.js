@@ -33,10 +33,10 @@ async function run() {
     ['Étudiant', 'Démo', 'etudiant@vev.tn', '', password]
   )
   const trips = [
-    [ownerIds[0], 'Tunis', 'Sousse', day(1), '14:00', 12, 15, 'minibus', '+21620123456'],
-    [ownerIds[1], 'Tunis', 'Sfax', day(1), '16:30', 18, 22, 'bus', '+21620987654'],
-    [ownerIds[2], 'Sousse', 'Monastir', day(2), '08:00', 5, 8, 'van', '+21622111222'],
-    [ownerIds[3], 'Tunis', 'Bizerte', day(2), '10:15', 7, 14, 'minibus', '+21623333444'],
+    [ownerIds[0], 'Tunis', 'Sousse', day(1), '14:00', 12, 15, 'louage8', '+21620123456'],
+    [ownerIds[1], 'Tunis', 'Sfax', day(1), '16:30', 18, 22, 'louage12', '+21620987654'],
+    [ownerIds[2], 'Sousse', 'Monastir', day(2), '08:00', 5, 8, 'louage6', '+21622111222'],
+    [ownerIds[3], 'Tunis', 'Bizerte', day(2), '10:15', 7, 14, 'louage8', '+21623333444'],
   ]
   for (const trip of trips) {
     await pool.query(

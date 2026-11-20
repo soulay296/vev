@@ -57,7 +57,7 @@ export function TripDetailPage() {
   }
 
   const { members } = data
-  const vehicle = images.vehicles[trip.vehicle_type] || images.vehicles.minibus
+  const vehicle = images.vehicles[trip.vehicle_type] || images.vehicles.louage8
   const maxSeats = Math.max(1, trip.seats_left)
   const activeBooking = myBookings.find(
     (booking) => booking.tripId === id && booking.status !== 'cancelled' && booking.status !== 'refused'

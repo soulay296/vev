@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { CalendarPlus, Car, Phone, Ticket, TrendingUp } from 'lucide-react'
+import { CalendarPlus, Phone, Route, Ticket, TrendingUp } from 'lucide-react'
 import { EmptyState } from '../components/ui/EmptyState'
 import { Badge } from '../components/ui/Badge'
 import { Button, buttonClasses } from '../components/ui/Button'
@@ -32,7 +32,7 @@ export function OwnerPage() {
       <div className="mx-auto max-w-md px-4 py-10">
         <EmptyState
           title="Compte étudiant"
-          description="L'espace propriétaire est réservé aux comptes propriétaires de transport. Créez un compte propriétaire pour publier vos trajets."
+          description="L'espace propriétaire est réservé aux comptes propriétaires de louage. Créez un compte propriétaire pour publier vos trajets."
           action={
             <Link to="/search" className={buttonClasses()}>
               Chercher un trajet
@@ -49,7 +49,7 @@ export function OwnerPage() {
     .reduce((sum, booking) => sum + booking.seats * (booking.trip?.price || 0), 0)
 
   const stats = [
-    { label: 'Trajets publiés', value: String(myTrips.length), icon: Car },
+    { label: 'Trajets publiés', value: String(myTrips.length), icon: Route },
     { label: 'Réservations', value: String(activeBookings.length), icon: Ticket },
     { label: 'Revenus confirmés', value: `${revenue} DT`, icon: TrendingUp },
   ]

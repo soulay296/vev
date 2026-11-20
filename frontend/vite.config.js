@@ -12,7 +12,7 @@ export default defineConfig({
       manifest: {
         name: 'vev',
         short_name: 'vev',
-        description: 'Transport collectif tunisien',
+        description: 'Louages entre gouvernorats en Tunisie',
         lang: 'fr',
         dir: 'ltr',
         theme_color: '#C2410C',

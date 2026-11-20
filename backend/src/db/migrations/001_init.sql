@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS trips (
   departure_time TEXT NOT NULL,
   price INTEGER NOT NULL CHECK (price > 0),
   total_seats INTEGER NOT NULL CHECK (total_seats BETWEEN 1 AND 60),
-  vehicle_type TEXT NOT NULL CHECK (vehicle_type IN ('bus', 'minibus', 'van')),
+  vehicle_type TEXT NOT NULL CHECK (vehicle_type IN ('louage6', 'louage8', 'louage12')),
   phone TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

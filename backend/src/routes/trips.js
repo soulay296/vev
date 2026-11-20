@@ -15,7 +15,7 @@ const TRIP_SELECT = `
   FROM trips t JOIN users u ON u.id = t.owner_id
 `
 
-const VEHICLES = ['bus', 'minibus', 'van']
+const VEHICLES = ['louage6', 'louage8', 'louage12']
 
 function validateTripPayload(body) {
   const { from_city, to_city, departure_date, departure_time, price, total_seats, vehicle_type, phone } = body || {}
@@ -29,7 +29,7 @@ function validateTripPayload(body) {
   const seatsNum = Number(total_seats)
   if (!Number.isInteger(priceNum) || priceNum < 1 || priceNum > 999) return 'Prix invalide'
   if (!Number.isInteger(seatsNum) || seatsNum < 1 || seatsNum > 60) return 'Nombre de places invalide'
-  if (!VEHICLES.includes(vehicle_type)) return 'Type de véhicule invalide'
+  if (!VEHICLES.includes(vehicle_type)) return 'Type de louage invalide'
   if (String(phone).length < 8) return 'Numéro de téléphone invalide'
   return null
 }
